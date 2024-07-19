@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_REGION = 'us-east-1'
+        AWS_ACCESS_KEY_ID = 'F'
+        AWS_SECRET_ACCESS_KEY = 'H'
+        
+
+    }
+    
+    stages{
+ 	stage("Git Checkout"){
+ 		steps{
+ 			git branch: 'main', credentialsId: 'Github', url: 'https://github.com/Krishnasai949203/terraform-demo.git'
+ 		}
+ 	}
+ 	stage('Terraform Init') {
+            steps {
+                dir('Multiple_instance'){
+                // Initialize Terraform
+                script {
+                    sh 'terraform init'
+                }
+                }
+            }
+        }
+    stage('Terraform Plan') {
+            steps {
+                dir('Multiple_instance'){
+                sh 'terraform plan'
+                }
+            }
+        }
+    stage('Terraform Apply') {
+            steps {
+                dir('Multiple_instance'){
+                sh 'terraform apply -auto-approve'
+                }
+            }
+        }
+
+
+ }
+}
